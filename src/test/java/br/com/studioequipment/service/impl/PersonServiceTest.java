@@ -1,9 +1,12 @@
 package br.com.studioequipment.service.impl;
 
+import br.com.studioequipment.exceptions.EquipmentNotFoundException;
 import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
 import br.com.studioequipment.repository.IPersonRepository;
+import br.com.studioequipment.repository.entities.Equipment;
 import br.com.studioequipment.repository.entities.Person;
+import br.com.studioequipment.service.interfaces.IEquipmentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,9 @@ public class PersonServiceTest {
 
     @Mock
     IPersonRepository personRepository;
+
+    @Mock
+    IEquipmentService equipmentService;
 
     @Mock
     Logger log;
@@ -121,6 +127,48 @@ public class PersonServiceTest {
         });
         Assertions.assertEquals("P01", thrown.getCode());
         Assertions.assertEquals("Person Not Found", thrown.getMessage());
+    }
+
+    @Test
+    void testAddEquipmentSuccess() throws PersonNotFoundException, EquipmentNotFoundException {
+        when(personRepository.findPersonByName(any()))
+                .thenReturn(List.of(Person.builder()
+                        .id(01L)
+                        .name("Matthew")
+                        .age(21L)
+                        .build()));
+        when(equipmentService.findEquipmentBySerialNumber(any()))
+                .thenReturn(Equipment.builder()
+                        .idNumber(5L)
+                        .equipmentType("Instrument")
+                        .equipmentPrice(500L)
+                        .build());
+
+        personService.addEquipment("personName", "documentNumber");
+    }
+
+    @Test
+    void testAddEquipmentPersonNotFoundError() {
+        when(personRepository.findPersonByName(any()))
+                .thenReturn(null);
+        PersonNotFoundException thrown = Assertions.assertThrows(PersonNotFoundException.class, () -> {
+            personService.addEquipment("Jack", "33");
+        });
+        Assertions.assertEquals("P02", thrown.getCode());
+        Assertions.assertEquals("Error in finding Jack.", thrown.getMessage());
+    }
+
+    @Test
+    void testAddEquipmentEquipmentNotFoundError() throws PersonNotFoundException, EquipmentNotFoundException {
+        when(personRepository.findPersonByName(any()))
+                .thenReturn(List.of(Person.builder().name("Jack").id(17L).build()));
+        when(equipmentService.findEquipmentBySerialNumber(any()))
+                .thenThrow(new EquipmentNotFoundException("D01", "Error finding equipment number 33."));
+        EquipmentNotFoundException thrown = Assertions.assertThrows(EquipmentNotFoundException.class, () -> {
+            personService.addEquipment("Jack", "33");
+        });
+        Assertions.assertEquals("D01", thrown.getCode());
+        Assertions.assertEquals("Error finding document number 33.", thrown.getMessage());
     }
 
 }

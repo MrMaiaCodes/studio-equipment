@@ -10,7 +10,7 @@ public interface IService<T> {
 
     T save(T t) throws SaveMethodException;
 
-    void delete(T t) throws  PersonNotFoundException;
+    void delete(T t) throws  PersonNotFoundException, EquipmentNotFoundException;
 
     List<T> listAll();
 

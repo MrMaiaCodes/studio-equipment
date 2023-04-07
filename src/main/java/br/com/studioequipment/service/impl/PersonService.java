@@ -36,7 +36,7 @@ public class PersonService extends AbstractValidateService<Person> implements IP
     }
 
     @Override
-    public void delete(Person person) throws PersonNotFoundException {
+    public void delete(Person person) throws PersonNotFoundException, EquipmentNotFoundException {
         log.info("initialized PersonService.delete");
         var personDelete = personRepository.findById(person.getId()).orElseThrow(
                 () -> new PersonNotFoundException("P01", "Person Not Found")
