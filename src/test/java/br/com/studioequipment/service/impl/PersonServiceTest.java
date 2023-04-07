@@ -142,13 +142,14 @@ public class PersonServiceTest {
                         .idNumber(5L)
                         .equipmentType("Instrument")
                         .equipmentPrice(500L)
+                        .serialNumber("33")
                         .build());
 
         personService.addEquipment("personName", "documentNumber");
     }
 
     @Test
-    void testAddEquipmentPersonNotFoundError() {
+    void testAddEquipmentPersonNotFoundExceptionError() {
         when(personRepository.findPersonByName(any()))
                 .thenReturn(null);
         PersonNotFoundException thrown = Assertions.assertThrows(PersonNotFoundException.class, () -> {
@@ -159,7 +160,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    void testAddEquipmentEquipmentNotFoundError() throws PersonNotFoundException, EquipmentNotFoundException {
+    void testAddEquipmentEquipmentNotFoundExceptionError() throws PersonNotFoundException, EquipmentNotFoundException {
         when(personRepository.findPersonByName(any()))
                 .thenReturn(List.of(Person.builder().name("Jack").id(17L).build()));
         when(equipmentService.findEquipmentBySerialNumber(any()))

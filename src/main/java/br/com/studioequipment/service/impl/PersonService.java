@@ -6,6 +6,7 @@ import br.com.studioequipment.exceptions.SaveMethodException;
 import br.com.studioequipment.repository.IPersonRepository;
 import br.com.studioequipment.repository.entities.Person;
 import br.com.studioequipment.service.AbstractValidateService;
+import br.com.studioequipment.service.interfaces.IEquipmentService;
 import br.com.studioequipment.service.interfaces.IPersonService;
 import br.com.studioequipment.service.interfaces.IService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,9 @@ public class PersonService extends AbstractValidateService<Person> implements IP
 
     @Autowired
     private IPersonRepository personRepository;
+
+    @Autowired
+    private IEquipmentService equipmentService;
 
     @Override
     public Person save(Person person) throws SaveMethodException {
@@ -88,5 +92,16 @@ public class PersonService extends AbstractValidateService<Person> implements IP
     protected boolean validate(Person person) {
         return !validateStringIsNullOrBlank(person.getName())
                 && validateLongNotZero(person.getAge());
+    }
+
+    @Override
+    public void addEquipment(String personName, String equipmentSerialNumber)
+        throws PersonNotFoundException, EquipmentNotFoundException {
+        log.info("initialized personService.addEquipment");
+        var personFind = findPersonByName(personName);
+        var equipmentFind = equipmentService
+                .findEquipmentBySerialNumber(equipmentSerialNumber);
+        log.info("processing add");
+        if (personFind.get(0))
     }
 }

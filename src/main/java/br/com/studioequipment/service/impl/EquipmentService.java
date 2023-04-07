@@ -73,6 +73,7 @@ public class EquipmentService implements IEquipmentService {
                 .orElseThrow(() -> new EquipmentNotFoundException("E01", "Equipment not found")
                 );
         log.info("processing update");
+        equipmentFind.setEquipmentName(equipment.getEquipmentName());
         equipmentFind.setEquipmentType(equipment.getEquipmentType());
         equipmentFind.setEquipmentPrice(equipment.getEquipmentPrice());
 

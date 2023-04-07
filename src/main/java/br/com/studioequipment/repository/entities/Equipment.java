@@ -34,6 +34,12 @@ public class Equipment {
     @Column(name = "DT_TYPE")
     private String equipmentType;
 
+    @Column(name = "DT_NAME")
+    private String equipmentName;
+
+    @Column(name = "DT_SERIALNUMBER")
+    private String serialNumber;
+
     @Column(name = "PRICE_EQUIPMENT")
     private Long equipmentPrice;
 

@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "TB_PERSON")
@@ -37,11 +38,11 @@ public class Person {
 
     @Column(name = "DT_AGE")
     private Long age;
-/*
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "PERSON_ID")
     private List<Equipment> equipments;
-*/
+
     public Long getId() {
         return id;
     }
