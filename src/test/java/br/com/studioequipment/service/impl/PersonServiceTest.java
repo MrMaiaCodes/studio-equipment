@@ -101,7 +101,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    void testDeleteSuccess() throws PersonNotFoundException {
+    void testDeleteSuccess() throws PersonNotFoundException, EquipmentNotFoundException {
         when(personRepository.findById(any())).thenReturn(Optional.of(Person.builder()
                 .id(03L)
                 .name("Jamie")
@@ -169,7 +169,7 @@ public class PersonServiceTest {
             personService.addEquipment("Jack", "33");
         });
         Assertions.assertEquals("D01", thrown.getCode());
-        Assertions.assertEquals("Error finding document number 33.", thrown.getMessage());
+        Assertions.assertEquals("Error finding equipment number 33.", thrown.getMessage());
     }
 
 }

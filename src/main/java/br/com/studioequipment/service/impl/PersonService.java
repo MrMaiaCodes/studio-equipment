@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -102,6 +103,10 @@ public class PersonService extends AbstractValidateService<Person> implements IP
         var equipmentFind = equipmentService
                 .findEquipmentBySerialNumber(equipmentSerialNumber);
         log.info("processing add");
-        if (personFind.get(0))
+        if (personFind.get(0).getEquipments() == null)
+            personFind.get(0).setEquipments(new ArrayList<>());
+        personFind.get(0).getEquipments().add(equipmentFind);
+        personRepository.save(personFind.get(0));
+        log.info("add complete");
     }
 }

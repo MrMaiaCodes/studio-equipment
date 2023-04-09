@@ -43,7 +43,7 @@ public class EquipmentService implements IEquipmentService {
             return equipment;
         } else {
             log.error("validation failed");
-            throw new SaveMethodException("E01", "invalid Equipment entered");
+            throw new SaveMethodException("E01", "Invalid equipment entered");
         }
     }
 

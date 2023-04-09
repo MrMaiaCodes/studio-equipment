@@ -27,7 +27,7 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler(EquipmentNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> DocumentNotFoundExceptionHandler(EquipmentNotFoundException exception) {
+    public ResponseEntity<ErrorResponseDTO> EquipmentNotFoundExceptionHandler(EquipmentNotFoundException exception) {
         log.info("wound up on exception handler, for not having found a document");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
