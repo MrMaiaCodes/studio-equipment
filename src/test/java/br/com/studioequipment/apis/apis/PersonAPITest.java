@@ -8,7 +8,6 @@ import br.com.studioequipment.apis.dto.responses.responses.PersonResponseDTO;
 import br.com.studioequipment.exceptions.EquipmentNotFoundException;
 import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
-import br.com.studioequipment.repository.entities.Equipment;
 import br.com.studioequipment.repository.entities.Person;
 import br.com.studioequipment.service.interfaces.IPersonService;
 import org.junit.jupiter.api.Assertions;
