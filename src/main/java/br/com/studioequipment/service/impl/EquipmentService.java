@@ -1,7 +1,6 @@
 package br.com.studioequipment.service.impl;
 
 import br.com.studioequipment.exceptions.EquipmentNotFoundException;
-import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
 import br.com.studioequipment.repository.IEquipmentRepository;
 import br.com.studioequipment.repository.entities.Equipment;

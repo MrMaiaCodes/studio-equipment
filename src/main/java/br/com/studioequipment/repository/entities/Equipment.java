@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "TB_EQUIPMENT")
 @GenericGenerator(
         name = "SEQ_EQUIPMENT",
-        strategy = "org.hibernate.id.enhanced.sequenceStyleGenerator",
+        strategy = "br.com.estudioequipment.repository.entity.Equipment",
         parameters = {
                 @Parameter(name = "sequence_name", value = "SEQ_DOCUMENT"),
                 @Parameter(name = "initial_value", value = "1"),
