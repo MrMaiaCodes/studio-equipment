@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IService<T> {
 
-    T save(T t) throws SaveMethodException;
+    T save(T t) throws SaveMethodException, PersonNotFoundException;
 
     void delete(T t) throws  PersonNotFoundException, EquipmentNotFoundException;
 

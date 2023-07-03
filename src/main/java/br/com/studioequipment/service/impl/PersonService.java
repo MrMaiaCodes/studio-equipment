@@ -106,12 +106,13 @@ public class PersonService extends AbstractValidateService<Person> implements IP
         if (personFind.get(0).getEquipments() == null)
             personFind.get(0).setEquipments(new ArrayList<>());
         personFind.get(0).getEquipments().add(equipmentFind);
+        equipmentFind.setOwner(personFind.get(0));
         personRepository.save(personFind.get(0));
         log.info("add complete");
     }
 
     @Override
-    public boolean isOverage(Person person) throws PersonNotFoundException {
+    public void isOverage(Person person) throws PersonNotFoundException {
         if (person.getAge() >= 18) {
             person.isOverage();
         }

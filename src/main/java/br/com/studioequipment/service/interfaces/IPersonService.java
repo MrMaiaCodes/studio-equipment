@@ -13,5 +13,5 @@ public interface IPersonService extends IService<Person> {
     void addEquipment(String personName, String equipmentSerialNumber)
             throws PersonNotFoundException, EquipmentNotFoundException;
 
-    boolean isOverage(Person person) throws PersonNotFoundException;
+    void isOverage(Person person) throws PersonNotFoundException;
 }
