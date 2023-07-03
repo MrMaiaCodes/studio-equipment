@@ -4,23 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "TB_PERSON")
-@GenericGenerator(
-        name = "SEQ_PERSON",
-        strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {
-                @Parameter(name = "sequence_name", value = "SEQ_PERSON"),
-                @Parameter(name = "initial_value", value = "1"),
-                @Parameter(name = "increment_size", value = "1")
-        }
-)
+@SequenceGenerator(name = "SEQ_PERSON")
 
 @Data
 @Builder
@@ -38,6 +28,9 @@ public class Person {
 
     @Column(name = "DT_AGE")
     private Long age;
+
+    @Column(name = "DT_OVERAGE")
+    private boolean overage;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "PERSON_ID")

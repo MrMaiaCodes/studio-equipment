@@ -3,6 +3,8 @@ package br.com.studioequipment.service.impl;
 import br.com.studioequipment.exceptions.EquipmentNotFoundException;
 import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
+import br.com.studioequipment.models.PersonBuilder;
+import br.com.studioequipment.models.PersonDTOBuilder;
 import br.com.studioequipment.repository.IPersonRepository;
 import br.com.studioequipment.repository.entities.Equipment;
 import br.com.studioequipment.repository.entities.Person;
@@ -42,9 +44,12 @@ public class PersonServiceTest {
     }
 
     @Test
-    void testSaveSuccess() throws SaveMethodException {
-        when(personRepository.save(any())).thenReturn(Person.builder().id(25L).build());
-        Person result = personService.save(Person.builder().name("Steven").age(30L).build());
+    void testSaveSuccess() throws SaveMethodException, PersonNotFoundException {
+        var builder = PersonDTOBuilder.personDTOSuccessBuilder();
+        var builderNonDTO = PersonBuilder.person1SuccessBuilder();
+        when(personRepository.save(any())).thenReturn(builder);
+
+        Person result = personService.save(builderNonDTO);
         Assertions.assertNotNull(result);
     }
 

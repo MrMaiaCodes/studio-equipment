@@ -4,22 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "TB_EQUIPMENT")
-@GenericGenerator(
-        name = "SEQ_EQUIPMENT",
-        strategy = "br.com.estudioequipment.repository.entity.Equipment",
-        parameters = {
-                @Parameter(name = "sequence_name", value = "SEQ_DOCUMENT"),
-                @Parameter(name = "initial_value", value = "1"),
-                @Parameter(name = "increment_size", value = "1")
-        }
-)
+@SequenceGenerator(name = "SEQ_EQUIPMENT")
 @Builder
 @Data
 @AllArgsConstructor
@@ -42,6 +33,11 @@ public class Equipment {
 
     @Column(name = "PRICE_EQUIPMENT")
     private Long equipmentPrice;
+
+    @Column(name = "OWNER")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PERSON_ID")
+    private Person owner;
 
     public Long getIdNumber() {return idNumber;}
 

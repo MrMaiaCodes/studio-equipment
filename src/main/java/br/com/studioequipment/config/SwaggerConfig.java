@@ -19,7 +19,8 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("br.com.persondoc.database.studioequipment"))
+                .apis(RequestHandlerSelectors.basePackage(
+                        "br.com.studioequipment"))
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false)
@@ -32,9 +33,13 @@ public class SwaggerConfig {
                 .description(buildDescription().toString())
                 .version("0.0.1-SNAPSHOT")
                 .license("Apache License Version 2.0")
-                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
-                .contact(new Contact("Silvio Maia", "https://github.com/Cigarrathegoat",
-                        "mrmaiacodes@gmail.com"))
+                .licenseUrl(
+                        "https://www.apache.org/licenses/LICENSE-2.0")
+                .contact(
+                        new Contact(
+                                "Silvio Maia", "https://github.com/Cigarrathegoat",
+                        "mrmaiacodes@gmail.com")
+                )
                 .build();
     }
 

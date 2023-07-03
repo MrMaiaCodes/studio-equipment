@@ -8,7 +8,6 @@ import br.com.studioequipment.repository.entities.Person;
 import br.com.studioequipment.service.AbstractValidateService;
 import br.com.studioequipment.service.interfaces.IEquipmentService;
 import br.com.studioequipment.service.interfaces.IPersonService;
-import br.com.studioequipment.service.interfaces.IService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +26,11 @@ public class PersonService extends AbstractValidateService<Person> implements IP
     private IEquipmentService equipmentService;
 
     @Override
-    public Person save(Person person) throws SaveMethodException {
+    public Person save(Person person) throws SaveMethodException, PersonNotFoundException {
         log.info("initialized PersonService.save");
         if (validate(person)) {
             log.info("Processing save");
+            isOverage(person);
             personRepository.save(person);
             log.info("save complete");
             return person;
@@ -108,5 +108,12 @@ public class PersonService extends AbstractValidateService<Person> implements IP
         personFind.get(0).getEquipments().add(equipmentFind);
         personRepository.save(personFind.get(0));
         log.info("add complete");
+    }
+
+    @Override
+    public boolean isOverage(Person person) throws PersonNotFoundException {
+        if (person.getAge() >= 18) {
+            person.isOverage();
+        }
     }
 }

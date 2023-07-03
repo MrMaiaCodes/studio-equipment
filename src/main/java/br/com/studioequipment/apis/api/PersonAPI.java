@@ -77,7 +77,7 @@ public class PersonAPI {
                 .build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{personId}")
     public ResponseEntity<DeleteResponseDTO> delete(@PathVariable("personId") Long personId)
             throws PersonNotFoundException, EquipmentNotFoundException {
         personService.delete(Person.builder().id(personId).build());
