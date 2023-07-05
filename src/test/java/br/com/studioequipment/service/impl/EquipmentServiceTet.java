@@ -1,11 +1,9 @@
 package br.com.studioequipment.service.impl;
 
 import br.com.studioequipment.exceptions.EquipmentNotFoundException;
-import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
 import br.com.studioequipment.repository.IEquipmentRepository;
 import br.com.studioequipment.repository.entities.Equipment;
-import org.hibernate.annotations.ManyToAny;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -149,7 +147,7 @@ class EquipmentServiceTet {
 
     @Test
     void testFindEquipmentBySerialNumberSuccess() throws EquipmentNotFoundException {
-        when(equipmentRepository.findEquipmentBySerialNumber(anyString()))
+        when(equipmentRepository.findEquipmentByName(anyString()))
                 .thenReturn(Equipment.builder()
                         .equipmentType("instrument")
                         .equipmentName("drumset")
@@ -158,16 +156,16 @@ class EquipmentServiceTet {
                         .idNumber(1L)
                         .build()
                 );
-        Equipment result = equipmentService.findEquipmentBySerialNumber("999");
+        Equipment result = equipmentService.findEquipmentByName("999");
         Assertions.assertNotNull(result);
     }
 
     @Test
     void findEquipmentBySerialNumberEquipmentNotFoundExceptionError() throws EquipmentNotFoundException {
-        when(equipmentRepository.findEquipmentBySerialNumber(anyString()))
+        when(equipmentRepository.findEquipmentByName(anyString()))
                 .thenReturn(null);
         EquipmentNotFoundException thrown = Assertions.assertThrows(EquipmentNotFoundException.class,
-                () -> {equipmentService.findEquipmentBySerialNumber("999");
+                () -> {equipmentService.findEquipmentByName("999");
         });
         Assertions.assertEquals("E01", thrown.getCode());
         Assertions.assertEquals("Error finding equipment", thrown.getMessage());

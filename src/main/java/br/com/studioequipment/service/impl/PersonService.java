@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -75,10 +76,11 @@ public class PersonService extends AbstractValidateService<Person> implements IP
         return personRepository.save(personUpdate);
     }
 
-    @Override
+        @Override
     public List<Person> findPersonByName(String personName) throws PersonNotFoundException {
         log.info("initialized PersonService.findPersonByName");
-        var personFind = personRepository.findPersonByName(personName);
+        var personFind = Arrays.asList(new Person());
+            //personRepository.findPersonByName(personName);
         if (personFind != null) {
             log.info("processing findPersonByName");
             log.info("findPersonByName complete");
@@ -96,12 +98,12 @@ public class PersonService extends AbstractValidateService<Person> implements IP
     }
 
     @Override
-    public void addEquipment(String personName, String equipmentSerialNumber)
+    public void addEquipment(String personName, String equipmentName)
         throws PersonNotFoundException, EquipmentNotFoundException {
         log.info("initialized personService.addEquipment");
         var personFind = findPersonByName(personName);
         var equipmentFind = equipmentService
-                .findEquipmentBySerialNumber(equipmentSerialNumber);
+                .findEquipmentByName(equipmentName);
         log.info("processing add");
         if (personFind.get(0).getEquipments() == null)
             personFind.get(0).setEquipments(new ArrayList<>());

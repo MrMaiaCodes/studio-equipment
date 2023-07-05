@@ -19,9 +19,9 @@ public class EquipmentService implements IEquipmentService {
     private IEquipmentRepository equipmentRepository;
 
     @Override
-    public Equipment findEquipmentBySerialNumber(String serialNumber) throws EquipmentNotFoundException {
+    public Equipment findEquipmentByName(String name) throws EquipmentNotFoundException {
         log.info("initialized find");
-        var equipmentFind = equipmentRepository.findEquipmentBySerialNumber(serialNumber);
+        var equipmentFind = new Equipment();
         if (equipmentFind != null) {
             log.info("processing find");
             log.info("find completed");

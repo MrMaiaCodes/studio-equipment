@@ -25,7 +25,8 @@ public class PersonAPI {
     private IPersonService personService;
 
     @PostMapping("/new")
-    public PersonResponseDTO addWithBody(@RequestBody PersonDTO personDTO) throws SaveMethodException {
+    public PersonResponseDTO addWithBody(@RequestBody PersonDTO personDTO) throws SaveMethodException,
+            PersonNotFoundException {
         return PersonResponseDTO.builder()
                 .data(
                         PersonDTOAdapter.convertTo(
@@ -77,8 +78,17 @@ public class PersonAPI {
                 .build();
     }
 
+    @PostMapping("/mongoDB")
+    public ResponseEntity addEquipment(@RequestBody Person person)
+            throws EquipmentNotFoundException, PersonNotFoundException, SaveMethodException {
+
+        personService.save(person);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .build();
+    }
+
     @DeleteMapping("/{personId}")
-    public ResponseEntity<DeleteResponseDTO> delete(@PathVariable("personId") Long personId)
+    public ResponseEntity<DeleteResponseDTO> delete(@PathVariable("personId") String personId)
             throws PersonNotFoundException, EquipmentNotFoundException {
         personService.delete(Person.builder().id(personId).build());
 

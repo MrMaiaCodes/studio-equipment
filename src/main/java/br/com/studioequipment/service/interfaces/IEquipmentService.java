@@ -5,5 +5,5 @@ import br.com.studioequipment.repository.entities.Equipment;
 
 public interface IEquipmentService extends IService<Equipment> {
 
-    Equipment findEquipmentBySerialNumber(String serialNumber) throws EquipmentNotFoundException;
+    Equipment findEquipmentByName(String name) throws EquipmentNotFoundException;
 }

@@ -2,7 +2,6 @@ package br.com.studioequipment.apis.apis;
 
 import br.com.studioequipment.apis.api.EquipmentAPI;
 import br.com.studioequipment.apis.dto.requests.EquipmentDTO;
-import br.com.studioequipment.apis.dto.requests.PersonsNewEquipmentDTO;
 import br.com.studioequipment.apis.dto.responses.responses.EquipmentListResponseDTO;
 import br.com.studioequipment.apis.dto.responses.responses.EquipmentResponseDTO;
 import br.com.studioequipment.exceptions.EquipmentNotFoundException;
@@ -37,13 +36,13 @@ public class EquipmentAPITest {
     }
 
     @Test
-    void testAddWithBodySuccess() throws SaveMethodException {
+    void testAddWithBodySuccess() throws SaveMethodException, PersonNotFoundException {
         when(equipmentService.save(any())).thenReturn(Equipment.builder()
                 .equipmentType("gear")
                 .equipmentName("microphone")
                 .equipmentPrice(50L)
                 .serialNumber("999")
-                .idNumber(1L)
+                .idNumber("1")
                 .build());
 
         EquipmentResponseDTO result = equipmentAPI.addWithBody(EquipmentDTO.builder()
@@ -73,7 +72,7 @@ public class EquipmentAPITest {
 
     @Test
     void testFindSuccess() throws EquipmentNotFoundException {
-        when(equipmentService.findEquipmentBySerialNumber(any()))
+        when(equipmentService.findEquipmentByName(any()))
                 .thenReturn(Equipment.builder()
                         .idNumber(1L)
                         .equipmentType("gear")
@@ -88,7 +87,7 @@ public class EquipmentAPITest {
 
     @Test
     void testFindEquipmentNotFoundExceptionError() throws EquipmentNotFoundException {
-        when(equipmentService.findEquipmentBySerialNumber(any()))
+        when(equipmentService.findEquipmentByName(any()))
                 .thenThrow(new EquipmentNotFoundException("E01", "Error in finding equipment"));
         EquipmentNotFoundException thrown = Assertions.assertThrows(EquipmentNotFoundException.class,
                 () -> {
@@ -119,7 +118,7 @@ public class EquipmentAPITest {
                 .equipmentName("guitar")
                 .equipmentPrice(50L)
                 .serialNumber("999")
-                .idNumber(1L)
+                .idNumber("1")
                 .build()
         );
         EquipmentResponseDTO result = equipmentAPI.changeWithBody(EquipmentDTO.builder()
@@ -158,8 +157,8 @@ public class EquipmentAPITest {
     void testDeleteSuccess() throws PersonNotFoundException, EquipmentNotFoundException {
         doNothing().when(equipmentService).delete(
                 Equipment.builder().equipmentType("gear").equipmentName("guitar")
-                        .equipmentPrice(50L).serialNumber("999").idNumber(1L).build());
-        assertDoesNotThrow(() -> equipmentAPI.delete(1L));
+                        .equipmentPrice(50L).serialNumber("999").idNumber("1").build());
+        assertDoesNotThrow(() -> equipmentAPI.delete("1"));
     }
 
     @Test

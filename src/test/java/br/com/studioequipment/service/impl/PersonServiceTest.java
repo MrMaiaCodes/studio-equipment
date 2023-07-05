@@ -3,6 +3,7 @@ package br.com.studioequipment.service.impl;
 import br.com.studioequipment.exceptions.EquipmentNotFoundException;
 import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
+import br.com.studioequipment.models.EquipmentBuilder;
 import br.com.studioequipment.models.PersonBuilder;
 import br.com.studioequipment.models.PersonDTOBuilder;
 import br.com.studioequipment.repository.IPersonRepository;
@@ -46,7 +47,7 @@ public class PersonServiceTest {
     @Test
     void testSaveSuccess() throws SaveMethodException, PersonNotFoundException {
         var builder = PersonDTOBuilder.personDTOSuccessBuilder();
-        var builderNonDTO = PersonBuilder.person1SuccessBuilder();
+        var builderNonDTO = PersonBuilder.personSuccessBuilder();
         when(personRepository.save(any())).thenReturn(builder);
 
         Person result = personService.save(builderNonDTO);
@@ -136,19 +137,13 @@ public class PersonServiceTest {
 
     @Test
     void testAddEquipmentSuccess() throws PersonNotFoundException, EquipmentNotFoundException {
+        var personBuilder = PersonBuilder.personSuccessBuilder();
+        var equipmentBuilder = EquipmentBuilder.equipmentSuccessBuilder();
+
         when(personRepository.findPersonByName(any()))
-                .thenReturn(List.of(Person.builder()
-                        .id(01L)
-                        .name("Matthew")
-                        .age(21L)
-                        .build()));
-        when(equipmentService.findEquipmentBySerialNumber(any()))
-                .thenReturn(Equipment.builder()
-                        .idNumber(5L)
-                        .equipmentType("Instrument")
-                        .equipmentPrice(500L)
-                        .serialNumber("33")
-                        .build());
+                .thenReturn(List.of(personBuilder));
+        when(equipmentService.findEquipmentByName(any()))
+                .thenReturn(equipmentBuilder);
 
         personService.addEquipment("personName", "documentNumber");
     }
@@ -168,7 +163,7 @@ public class PersonServiceTest {
     void testAddEquipmentEquipmentNotFoundExceptionError() throws PersonNotFoundException, EquipmentNotFoundException {
         when(personRepository.findPersonByName(any()))
                 .thenReturn(List.of(Person.builder().name("Jack").id(17L).build()));
-        when(equipmentService.findEquipmentBySerialNumber(any()))
+        when(equipmentService.findEquipmentByName(any()))
                 .thenThrow(new EquipmentNotFoundException("D01", "Error finding equipment number 33."));
         EquipmentNotFoundException thrown = Assertions.assertThrows(EquipmentNotFoundException.class, () -> {
             personService.addEquipment("Jack", "33");

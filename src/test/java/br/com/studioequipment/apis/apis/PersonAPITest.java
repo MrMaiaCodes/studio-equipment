@@ -38,7 +38,7 @@ public class PersonAPITest {
         MockitoAnnotations.openMocks(this);}
 
     @Test
-    void testAddWithBodySuccess() throws SaveMethodException {
+    void testAddWithBodySuccess() throws SaveMethodException, PersonNotFoundException {
         when(personService.save(any())).thenReturn(Person.builder()
                 .name("John")
                 .age(2L)

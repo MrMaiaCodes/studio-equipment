@@ -25,7 +25,7 @@ public class EquipmentAPI {
 
     @PostMapping("/new")
     public EquipmentResponseDTO addWithBody(@RequestBody EquipmentDTO equipmentDTO)
-            throws SaveMethodException {
+            throws SaveMethodException, PersonNotFoundException {
         return EquipmentResponseDTO.builder()
                 .data(
                         EquipmentDTOAdapter.convertTo(
@@ -41,7 +41,7 @@ public class EquipmentAPI {
         return EquipmentResponseDTO.builder()
                 .data(
                         EquipmentDTOAdapter.convertTo(
-                                equipmentService.findEquipmentBySerialNumber(equipmentNumber)
+                                equipmentService.findEquipmentByName(equipmentNumber)
                         )
                 )
                 .build();
@@ -72,7 +72,7 @@ public class EquipmentAPI {
     }
 
     @DeleteMapping("/delete/{equipmentId}")
-    public ResponseEntity<DeleteResponseDTO> delete(@PathVariable("equipmentId") Long equipmentId)
+    public ResponseEntity<DeleteResponseDTO> delete(@PathVariable("equipmentId") String equipmentId)
         throws PersonNotFoundException, EquipmentNotFoundException {
         equipmentService.delete(Equipment.builder().idNumber(equipmentId).build());
 
