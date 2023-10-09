@@ -1,9 +1,6 @@
 package br.com.studioequipment.models;
 
 import br.com.studioequipment.repository.entities.Equipment;
-import br.com.studioequipment.repository.entities.Person;
-
-import java.util.List;
 
 public class EquipmentBuilder {
 

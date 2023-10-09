@@ -8,7 +8,7 @@ import br.com.studioequipment.apis.dto.responses.responses.PersonResponseDTO;
 import br.com.studioequipment.exceptions.EquipmentNotFoundException;
 import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
-import br.com.studioequipment.repository.entities.Person;
+import br.com.studioequipment.repository.entities.Customer;
 import br.com.studioequipment.service.interfaces.IPersonService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class PersonAPITest {
+public class CustomerAPITest {
 
     @Mock
     IPersonService personService;
@@ -39,10 +39,10 @@ public class PersonAPITest {
 
     @Test
     void testAddWithBodySuccess() throws SaveMethodException, PersonNotFoundException {
-        when(personService.save(any())).thenReturn(Person.builder()
+        when(personService.save(any())).thenReturn(Customer.builder()
                 .name("John")
                 .age(2L)
-                .id(15L)
+                .id("15")
                 .build());
 
         PersonResponseDTO result = personAPI.addWithBody(PersonDTO.builder()
@@ -53,7 +53,7 @@ public class PersonAPITest {
     }
 
     @Test
-    void testAddWithBodySaveMethodExceptionError() throws SaveMethodException {
+    void testAddWithBodySaveMethodExceptionError() throws SaveMethodException, PersonNotFoundException {
         when(personService.save(any())).thenThrow(new SaveMethodException("P01", "Invalid person saved"));
         SaveMethodException thrown = Assertions.assertThrows(SaveMethodException.class, () -> {
             personAPI.addWithBody(PersonDTO.builder()
@@ -67,10 +67,10 @@ public class PersonAPITest {
 
     @Test
     void testFindSuccess() throws PersonNotFoundException {
-        when(personService.findPersonByName(anyString())).thenReturn(List.of(Person.builder()
+        when(personService.findPersonByName(anyString())).thenReturn(List.of(Customer.builder()
                 .name("Zack")
                 .age(30L)
-                .id(5L)
+                .id("5")
                 .build())
         );
 
@@ -91,9 +91,9 @@ public class PersonAPITest {
 
     @Test
     void testListAllPersons() {
-        when(personService.listAll()).thenReturn(List.of(Person.builder()
-                .id(1L)
-                .build(), Person.builder().id(2L).build()));
+        when(personService.listAll()).thenReturn(List.of(Customer.builder()
+                .id("1")
+                .build(), Customer.builder().id(2L).build()));
 
         PersonListResponseDTO result = personAPI.listAllPersons();
         Assertions.assertNotNull(result);
@@ -102,10 +102,10 @@ public class PersonAPITest {
 
     @Test
     void testChangeWithBodySuccess() throws PersonNotFoundException, EquipmentNotFoundException {
-        when(personService.update(any())).thenReturn(Person.builder()
+        when(personService.update(any())).thenReturn(Customer.builder()
                 .name("Tim")
                 .age(29L)
-                .id(1l)
+                .id("1")
                 .build()
         );
         PersonResponseDTO result = personAPI.changeWithBody(PersonDTO.builder()
@@ -170,19 +170,19 @@ public class PersonAPITest {
 
     @Test
     void testDeleteSuccess() throws PersonNotFoundException, EquipmentNotFoundException {
-        doNothing().when(personService).delete(Person.builder().name("James").age(23L).id(5L)
+        doNothing().when(personService).delete(Customer.builder().name("James").age(23L).id(5L)
                 .build());
-        assertDoesNotThrow(() -> personAPI.delete(5L));
+        assertDoesNotThrow(() -> personAPI.delete("5"));
     }
 
     @Test
     void testDeletePersonNotFoundExceptionError() throws PersonNotFoundException, EquipmentNotFoundException {
         doThrow(new PersonNotFoundException("P01", "Person Not Found"))
-                .when(personService).delete(Person.builder()
-                        .id(5L)
+                .when(personService).delete(Customer.builder()
+                        .id("5")
                         .build());
         PersonNotFoundException thrown = Assertions.assertThrows(PersonNotFoundException.class, () -> {
-            personAPI.delete(5L);
+            personAPI.delete("5");
         });
         Assertions.assertEquals("P01", thrown.getCode());
         Assertions.assertEquals("Person Not Found", thrown.getMessage());

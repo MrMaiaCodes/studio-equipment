@@ -1,11 +1,11 @@
 package br.com.studioequipment.models;
 
-import br.com.studioequipment.repository.entities.Person;
+import br.com.studioequipment.repository.entities.Customer;
 
 public class PersonBuilder {
 
 
-    public static Person personSuccessBuilder() {
-        return Person.builder().name("jimmy").age(50L).build();
+    public static Customer personSuccessBuilder() {
+        return Customer.builder().name("jimmy").age(50L).build();
     }
 }

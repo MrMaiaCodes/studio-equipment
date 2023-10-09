@@ -14,4 +14,6 @@ public class PersonDTO {
     private String name;
 
     private Long age;
+
+    private String zipCode;
 }

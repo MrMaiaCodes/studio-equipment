@@ -7,25 +7,23 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "equipment-collection")
-public class Equipment {
+@Document(collection = "microphone collection")
+public class Microphone {
 
     @Id
-    private String idNumber;
+    private String id;
 
-    private String equipmentType;
+    private String make;
 
-    private String equipmentName;
+    private String model;
 
-    private String serialNumber;
+    private LocalDate year;
 
-    private Long equipmentPrice;
-
-    private Customer owner;
-
+    private Long price;
 }

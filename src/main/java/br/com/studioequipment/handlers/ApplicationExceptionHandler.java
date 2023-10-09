@@ -39,6 +39,20 @@ public class ApplicationExceptionHandler {
                         .build());
     }
 
+    @ExceptionHandler(MicrophoneNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> MicrophoneNotFoundExceptionHandler(MicrophoneNotFoundException exception) {
+        log.info("wound up on exception handler for not having found a microphone");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseDTO.builder()
+                        .data(ErrorSpecificationDTO.builder()
+                                .errorCode("100")
+                                .errorMessage(exception.getMessage())
+                                .build())
+                        .build());
+
+    }
+
     @ExceptionHandler(EmptyListException.class)
     public ResponseEntity<ErrorResponseDTO>EmptyListExceptionHandler(EmptyListException exception) {
         log.info("wound up on exception handler, list is empty");

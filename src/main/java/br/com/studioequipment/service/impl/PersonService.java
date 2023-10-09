@@ -4,13 +4,14 @@ import br.com.studioequipment.exceptions.EquipmentNotFoundException;
 import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
 import br.com.studioequipment.repository.IPersonRepository;
-import br.com.studioequipment.repository.entities.Person;
+import br.com.studioequipment.repository.entities.Customer;
 import br.com.studioequipment.service.AbstractValidateService;
 import br.com.studioequipment.service.interfaces.IEquipmentService;
 import br.com.studioequipment.service.interfaces.IPersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class PersonService extends AbstractValidateService<Person> implements IPersonService {
+public class PersonService extends AbstractValidateService<Customer> implements IPersonService {
 
     @Autowired
     private IPersonRepository personRepository;
@@ -26,25 +27,45 @@ public class PersonService extends AbstractValidateService<Person> implements IP
     @Autowired
     private IEquipmentService equipmentService;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     @Override
-    public Person save(Person person) throws SaveMethodException, PersonNotFoundException {
+    public Customer save(Customer customer) throws SaveMethodException, PersonNotFoundException {
         log.info("initialized PersonService.save");
-        if (validate(person)) {
+        if (validate(customer)) {
             log.info("Processing save");
-            isOverage(person);
-            personRepository.save(person);
+            isOverage(customer);
+            personRepository.save(customer);
             log.info("save complete");
-            return person;
+            return customer;
         } else {
             log.error("validation failed");
             throw new SaveMethodException("P01", "Invalid Person saved");
         }
     }
 
+
+/*
+    public Customer saveSimplified(PersonDTO personDTO){
+        var url = "https://viacep.com.br/ws/" + personDTO.getZipCode() + "/json/";
+        var httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Address> httpEntity = new HttpEntity<>(httpHeaders);
+        var result = restTemplate.exchange(
+                url, HttpMethod.GET, httpEntity, Address.class);
+        var newPerson = Customer.builder().name(personDTO.getName())
+                .address(result.getBody()).build();
+        return personRepository.save(newPerson);
+
+    }
+
+ */
+
     @Override
-    public void delete(Person person) throws PersonNotFoundException, EquipmentNotFoundException {
+    public void delete(Customer customer) throws PersonNotFoundException, EquipmentNotFoundException {
         log.info("initialized PersonService.delete");
-        var personDelete = personRepository.findById(person.getId()).orElseThrow(
+        var personDelete = personRepository.findById(customer.getId()).orElseThrow(
                 () -> new PersonNotFoundException("P01", "Person Not Found")
         );
         log.info("Processing delete");
@@ -53,33 +74,33 @@ public class PersonService extends AbstractValidateService<Person> implements IP
     }
 
     @Override
-    public List<Person> listAll() {
+    public List<Customer> listAll() {
         log.info("initialized PersonService.listAll");
         log.info("listAll complete");
         return personRepository.findAll();
     }
 
     @Override
-    public Person update(Person person) throws PersonNotFoundException, EquipmentNotFoundException {
+    public Customer update(Customer customer) throws PersonNotFoundException, EquipmentNotFoundException {
         log.info("initialized PersonService.update");
-        var personFind = personRepository.findById(person.getId());
+        var personFind = personRepository.findById(customer.getId());
         var personUpdate = personFind.orElseThrow(
                 () -> new PersonNotFoundException("P01", "Person Not Found")
         );
 
         log.info("processing update");
-        personUpdate.setName(person.getName());
-        personUpdate.setAge(person.getAge());
-        personUpdate.setId(person.getId());
+        personUpdate.setName(customer.getName());
+        personUpdate.setAge(customer.getAge());
+        personUpdate.setId(customer.getId());
 
         log.info("update complete");
         return personRepository.save(personUpdate);
     }
 
         @Override
-    public List<Person> findPersonByName(String personName) throws PersonNotFoundException {
+    public List<Customer> findPersonByName(String personName) throws PersonNotFoundException {
         log.info("initialized PersonService.findPersonByName");
-        var personFind = Arrays.asList(new Person());
+        var personFind = Arrays.asList(new Customer());
             //personRepository.findPersonByName(personName);
         if (personFind != null) {
             log.info("processing findPersonByName");
@@ -92,9 +113,9 @@ public class PersonService extends AbstractValidateService<Person> implements IP
     }
 
     @Override
-    protected boolean validate(Person person) {
-        return !validateStringIsNullOrBlank(person.getName())
-                && validateLongNotZero(person.getAge());
+    protected boolean validate(Customer customer) {
+        return !validateStringIsNullOrBlank(customer.getName())
+                && validateLongNotZero(customer.getAge());
     }
 
     @Override
@@ -114,9 +135,9 @@ public class PersonService extends AbstractValidateService<Person> implements IP
     }
 
     @Override
-    public void isOverage(Person person) throws PersonNotFoundException {
-        if (person.getAge() >= 18) {
-            person.isOverage();
+    public void isOverage(Customer customer) throws PersonNotFoundException {
+        if (customer.getAge() >= 18) {
+            customer.isOverage();
         }
     }
 }

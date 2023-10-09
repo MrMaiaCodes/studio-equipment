@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "person-collection")
-public class Person {
+public class Customer {
 
     @Id
     private String id;
@@ -26,6 +26,8 @@ public class Person {
     private boolean overage;
 
     private List<Equipment> equipments;
+
+
 
 
 }

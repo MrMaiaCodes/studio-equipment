@@ -10,7 +10,7 @@ import br.com.studioequipment.apis.dto.responses.responses.PersonResponseDTO;
 import br.com.studioequipment.exceptions.EquipmentNotFoundException;
 import br.com.studioequipment.exceptions.PersonNotFoundException;
 import br.com.studioequipment.exceptions.SaveMethodException;
-import br.com.studioequipment.repository.entities.Person;
+import br.com.studioequipment.repository.entities.Customer;
 import br.com.studioequipment.service.interfaces.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -79,10 +79,10 @@ public class PersonAPI {
     }
 
     @PostMapping("/mongoDB")
-    public ResponseEntity addEquipment(@RequestBody Person person)
+    public ResponseEntity addEquipment(@RequestBody Customer customer)
             throws EquipmentNotFoundException, PersonNotFoundException, SaveMethodException {
 
-        personService.save(person);
+        personService.save(customer);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
     }
@@ -90,7 +90,7 @@ public class PersonAPI {
     @DeleteMapping("/{personId}")
     public ResponseEntity<DeleteResponseDTO> delete(@PathVariable("personId") String personId)
             throws PersonNotFoundException, EquipmentNotFoundException {
-        personService.delete(Person.builder().id(personId).build());
+        personService.delete(Customer.builder().id(personId).build());
 
         return ResponseEntity.ok(DeleteResponseDTO.builder()
                 .deleteSuccessMessage("Person successfully deleted")

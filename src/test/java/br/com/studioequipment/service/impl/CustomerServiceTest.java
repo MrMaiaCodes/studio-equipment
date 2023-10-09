@@ -7,8 +7,7 @@ import br.com.studioequipment.models.EquipmentBuilder;
 import br.com.studioequipment.models.PersonBuilder;
 import br.com.studioequipment.models.PersonDTOBuilder;
 import br.com.studioequipment.repository.IPersonRepository;
-import br.com.studioequipment.repository.entities.Equipment;
-import br.com.studioequipment.repository.entities.Person;
+import br.com.studioequipment.repository.entities.Customer;
 import br.com.studioequipment.service.interfaces.IEquipmentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-public class PersonServiceTest {
+public class CustomerServiceTest {
 
     @Mock
     IPersonRepository personRepository;
@@ -50,14 +49,14 @@ public class PersonServiceTest {
         var builderNonDTO = PersonBuilder.personSuccessBuilder();
         when(personRepository.save(any())).thenReturn(builder);
 
-        Person result = personService.save(builderNonDTO);
+        Customer result = personService.save(builderNonDTO);
         Assertions.assertNotNull(result);
     }
 
     @Test
     void testSaveNullNameError() throws SaveMethodException {
         SaveMethodException thrown = Assertions.assertThrows(SaveMethodException.class, () -> {
-            personService.save(Person.builder().name("").age(20L).build());
+            personService.save(Customer.builder().name("").age(20L).build());
 
         });
 
@@ -68,7 +67,7 @@ public class PersonServiceTest {
     @Test
     void testSaveAgeZeroError() throws SaveMethodException {
         SaveMethodException thrown = Assertions.assertThrows(SaveMethodException.class, () -> {
-            personService.save(Person.builder().name("Zack").age(0L).build());
+            personService.save(Customer.builder().name("Zack").age(0L).build());
         });
 
         Assertions.assertEquals("P01", thrown.getCode());
@@ -78,14 +77,14 @@ public class PersonServiceTest {
     @Test
     void findPersonByNameSuccess() throws PersonNotFoundException {
         when(personRepository.findPersonByName(anyString()))
-                .thenReturn(List.of(Person.builder()
+                .thenReturn(List.of(Customer.builder()
                         .id(11L)
                         .name("Joaquin")
                         .age(50L)
                         .build())
                 );
-        List<Person> personFound = personService.findPersonByName("Joaquin");
-        Assertions.assertNotNull(personFound);
+        List<Customer> customerFound = personService.findPersonByName("Joaquin");
+        Assertions.assertNotNull(customerFound);
     }
 
     @Test
@@ -102,19 +101,19 @@ public class PersonServiceTest {
     @Test
     void testListAllSuccess() {
         when(personRepository.findAll()).thenReturn(List.of());
-        List<Person> personList = personService.listAll();
-        Assertions.assertNotNull(personList);
+        List<Customer> customerList = personService.listAll();
+        Assertions.assertNotNull(customerList);
     }
 
     @Test
     void testDeleteSuccess() throws PersonNotFoundException, EquipmentNotFoundException {
-        when(personRepository.findById(any())).thenReturn(Optional.of(Person.builder()
+        when(personRepository.findById(any())).thenReturn(Optional.of(Customer.builder()
                 .id(03L)
                 .name("Jamie")
                 .age(23L)
                 .build())
         );
-        personService.delete(Person.builder()
+        personService.delete(Customer.builder()
                 .id(03L)
                 .name("Jamie")
                 .age(23L)
@@ -126,7 +125,7 @@ public class PersonServiceTest {
     void testDeletePersonNotFoundExceptionError() throws PersonNotFoundException {
         when(personRepository.findById(any())).thenReturn(Optional.empty());
         PersonNotFoundException thrown = Assertions.assertThrows(PersonNotFoundException.class, () -> {
-            personService.delete(Person.builder()
+            personService.delete(Customer.builder()
                     .name("Bartholomew")
                     .age(48L)
                     .build());
@@ -162,7 +161,7 @@ public class PersonServiceTest {
     @Test
     void testAddEquipmentEquipmentNotFoundExceptionError() throws PersonNotFoundException, EquipmentNotFoundException {
         when(personRepository.findPersonByName(any()))
-                .thenReturn(List.of(Person.builder().name("Jack").id(17L).build()));
+                .thenReturn(List.of(Customer.builder().name("Jack").id(17L).build()));
         when(equipmentService.findEquipmentByName(any()))
                 .thenThrow(new EquipmentNotFoundException("D01", "Error finding equipment number 33."));
         EquipmentNotFoundException thrown = Assertions.assertThrows(EquipmentNotFoundException.class, () -> {

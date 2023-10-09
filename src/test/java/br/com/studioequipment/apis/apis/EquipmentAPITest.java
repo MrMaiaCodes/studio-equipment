@@ -55,7 +55,7 @@ public class EquipmentAPITest {
     }
 
     @Test
-    void testAddWithBodySaveMethodExceptionError() throws SaveMethodException {
+    void testAddWithBodySaveMethodExceptionError() throws SaveMethodException, PersonNotFoundException {
         when(equipmentService.save(any())).thenThrow(new SaveMethodException("E01",
                 "Invalid Document Saved"));
         SaveMethodException thrown = Assertions.assertThrows(SaveMethodException.class, () -> {
@@ -74,7 +74,7 @@ public class EquipmentAPITest {
     void testFindSuccess() throws EquipmentNotFoundException {
         when(equipmentService.findEquipmentByName(any()))
                 .thenReturn(Equipment.builder()
-                        .idNumber(1L)
+                        .idNumber("1")
                         .equipmentType("gear")
                         .equipmentName("guitar strap")
                         .equipmentPrice(500L)
@@ -103,7 +103,7 @@ public class EquipmentAPITest {
                 .equipmentName("mic stand")
                 .equipmentPrice(50L)
                 .serialNumber("999")
-                .idNumber(1L)
+                .idNumber("1")
                 .build()));
 
         EquipmentListResponseDTO result = equipmentAPI.listAllEquipment();
@@ -166,11 +166,11 @@ public class EquipmentAPITest {
             EquipmentNotFoundException {
         doThrow(new EquipmentNotFoundException("E01", "Equipment not found"))
                 .when(equipmentService).delete(Equipment.builder()
-                        .idNumber(1L)
+                        .idNumber("1")
                         .build());
         EquipmentNotFoundException thrown = Assertions.assertThrows(EquipmentNotFoundException.class,
                 () -> {
-                    equipmentAPI.delete(1L);
+                    equipmentAPI.delete("1");
                 });
         Assertions.assertEquals("E01", thrown.getCode());
         Assertions.assertEquals("Equipment not found", thrown.getMessage());
